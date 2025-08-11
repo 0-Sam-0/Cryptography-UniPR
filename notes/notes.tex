@@ -1,0 +1,419 @@
+\documentclass[11pt]{article}
+% Basic packages
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{hyperref}
+% Mathematical packages
+\usepackage{amsmath,amssymb,amsthm}
+% Layout and formatting packages
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+% Color and box packages
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems,skins,breakable}
+
+% Page settings
+\geometry{margin=2.5cm}
+
+% Header settings
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Crittografia}
+\fancyhead[R]{\thepage}
+
+% Title customization
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+
+% Colored environment definitions
+\newtcbtheorem{theorem}{Teorema}%
+{colback=blue!5,colframe=blue!70!black,fonttitle=\bfseries,rounded corners}{thm}
+
+\newtcbtheorem{definition}{Definizione}%
+{colback=green!5,colframe=green!70!black,fonttitle=\bfseries,rounded corners}{def}
+
+\newtcbtheorem{lemma}{Lemma}%
+{colback=orange!5,colframe=orange!70!black,fonttitle=\bfseries,rounded corners}{lem}
+
+\newtcbtheorem{example}{Esempio}%
+{colback=purple!5,colframe=purple!70!black,fonttitle=\bfseries,rounded corners}{ex}
+
+\newtcbtheorem{question}{Domanda}%
+{colback=red!5,colframe=red!70!black,fonttitle=\bfseries,rounded corners}{q}
+
+\newtcolorbox{problem}[2][]{
+enhanced,
+colback=cyan!5,
+colframe=cyan!70!black,
+fonttitle=\bfseries,
+rounded corners,
+title={Problema: #2},
+segmentation style={dashed,cyan!70!black,line width=1pt},
+#1
+}
+
+% Custom commands
+\newcommand{\calU}{\mathcal{U}}
+
+% Spacing settings
+\setlength{\parindent}{0pt}      % No indentation
+\setlength{\parskip}{1em}        % Space between paragraphs
+
+% Usage examples:
+% 
+% \begin{theorem}{Nome}{label}
+% Testo del teorema
+% \end{theorem}
+% 
+% \begin{definition}{Nome}{label}
+% Testo della definizione
+% \end{definition}
+% 
+% \begin{lemma}{Nome}{label}
+% Testo del lemma
+% \end{lemma}
+%
+% \begin{example}{Nome}{label}
+% Testo dell'esempio
+% \end{example}
+%
+% \begin{question}{Nome}{label}
+% Testo della domanda
+% \end{question}
+%
+% \begin{problem}{Nome del problema}
+% Testo del problema da risolvere
+% \tcblower
+% \textbf{Soluzione:} Spiegazione della soluzione
+% \end{problem}
+%
+
+\begin{document}
+
+% Titolo
+\begin{center}
+    \LARGE \textbf{Crittografia}
+\end{center}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+\tableofcontents
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+\section{Lezione 1 - 26/09/2023}
+
+\subsection{Una suddivisione approssimativa della Matematica}
+
+    \begin{multicols}{2}
+    \textbf{Matematica delle grandezze continue}
+    \begin{itemize}
+        \item Analisi
+        \item Geometria  
+        \item Meccanica
+    \end{itemize}
+    
+    \columnbreak
+    
+    \textbf{Matematica delle grandezze discrete}
+    \begin{itemize}
+        \item \textcolor{red}{Aritmetica}
+        \item \textcolor{red}{Algebra}
+        \item Combinatoria
+    \end{itemize}
+    \end{multicols}
+    
+\subsection{Gruppi ciclici finiti: l'equazione $z^n = 1$}
+    Sia $n$ un intero positivo fissato. Consideriamo l'insieme $\calU_n$ delle soluzioni complesse dell'equazione $z^n = 1$. È facile vedere che le radici sono distinte.
+    
+    \begin{theorem}{}{}
+        Un polinomio ha radici distinte sse è primo con la sua derivata
+    \end{theorem}
+    
+    $f(z) = z^n-1 \implies f'(z) = n z^{n-1}$ e quindi i polinomi $f$ ed $f'$ non hanno fattori comuni.
+    
+    Per il Teorema fondamentale dell'algebra, $|\calU_n| = n$
+    
+    Gli elementi di $\calU_n$ sono disposti ai vertici del poligono regolare con $n$ lati, il centro nell'origine ed un vertice in $z = 1$.
+    
+    Poniamo
+    $$
+    \delta_n = e^{2\pi i /n} = \cos \left(\frac{2\pi}{n}\right) + i \, \sin\left(\frac{2\pi}{n}\right) = \cos(\theta_n) + i \, \sin(\theta_n)
+    $$
+    dove
+    $$
+    i^2 = -1 \quad \text{e} \quad \theta_n = \frac{2\pi}{n}
+    $$
+    
+    Osserviamo che:
+    $$
+    \delta_n^n=e^{2\pi i} = 1
+    $$
+    
+    Le $n$ soluzioni dell'equazione sono
+    $$
+    z_j = \delta_n^j = e^{2 \pi i j / n} \qquad \text{per } j=0,\dots, n-1
+    $$
+
+    $$
+    \delta_n^j \cdot \delta_n^k =
+    \begin{cases}
+        \delta_n^{j+k} & \text{se } j+k < n \\
+        \delta_n^{j+k-n} & \text{se } j+k \geq n
+    \end{cases}
+    $$
+
+    $$
+    \delta_n^{-j} = (\overline{\delta_n})^j =
+    \begin{cases}
+        \delta_n^{n-j} & \text{se } j \neq 0\\
+        \delta_n^0 = 1 & \text{se } j = 0
+    \end{cases}
+    $$
+
+    Se $m = q \cdot n + r$ dove $0 \leq r < n$ allora
+
+    $$
+        \delta_n^m = \delta_n^{qn+r} = (\delta_n^n)^q \cdot \delta_n^r = 1^q \cdot \delta_n^r = \delta_n^r
+    $$
+
+    Le soluzioni si possono classificare a seconda di quale sia il più piccolo poligono regolare su cui giacciono, cioè il loro periodo (la potenza da applicare per ottenere 1).
+
+    Es. $\delta_{12}^8$ è di ordine 3. Infatti $(\delta_{12}^8)^3 = \delta_{12}^{24} = \delta_{12}^0 = 1$
+
+    Alcune soluzioni di $z^n = 1$ soddisfano anche $z^k = 1$ per qualche $k$ intero positivo con $k<n$
+
+\subsection{Ordine di un elemento di $\calU_n$}
+    L'ordine di $z \in \calU_n$ è il minimo intero positivo $m$ per cui $z_m = 1$
+
+    E' il minimo periodo della successione
+    $$1, z, z^2, z^3, \dots, z^{n-1}, z^n = 1, z^{n+1} = z, \dots$$
+
+    $m$ non può superare $n$.
+
+    \begin{definition}{}{}
+        Diciamo che un intero $m$ divide un intero $n$ se esiste un intero $a$ t.c. $n = m \cdot a$.
+        In questo caso scriviamo $m | n$
+    \end{definition}
+
+    \begin{example}{}{}
+        Con questa definizione si ha:
+        $$
+        \begin{cases}
+            1 | n & \forall n \in \mathbb{Z} \\
+            n | 0 & \forall n \in \mathbb{Z} \\
+            0 | n & \iff n = 0 \\
+        \end{cases}
+        $$
+    \end{example}
+    
+
+    L'ordine $m$ di $z \in \calU_n$ è un divisore di n: se $z^n=1$ e $z^m=1$, allora $n = q \cdot m + r$ con $0 \leq r < m$ da cui
+
+    $$z^n = z^{qm+r} = (z^m)^q \cdot z^r = z^r = 1$$
+    che è assurdo se $r>0$. L'unica possibilità è che $r=0$.
+
+    Se l'ordine di $z\in \calU_n$ è $n$, si dice che $z$ è un generatore poiché le sue potenze successive sono distinte e forniscono tutti gli elementi di $\calU_n$.
+
+    Infatti, se esistessero $j$ e $k$ con $0 \leq j < k < n$ t.c.
+    $$z^j = z^k \implies z^{k-j}=1 \quad \text{ma } 1 \leq k-j < n$$
+    che è assurdo.
+
+    Dunque gli $n$ elementi indicati sono tutti e soli gli elementi di $calU_n$.
+
+    Se $z$ non è un generatore, questo non accade.
+
+        \begin{definition}{Sottogruppo di un elemento di $\calU_n$}{}
+            Dato $z \in \calU_n$ indicheremo con $\langle z \rangle$ il sottoinsieme $\{1, z, z^2, z^3, \dots \} \subseteq \calU_n$ e lo chiameremo \textcolor{red}{sottogruppo generato da z}.
+        \end{definition}
+
+        \begin{theorem}{Teorema (Lagrange)}{}
+            La cardinalità di $\langle z \rangle$ è uguale all'ordine di z ed è un divisore della cardinalità di $\calU_n$ che è $n$
+        \end{theorem}
+
+    Gli insiemi $\calU_n$ con $n$ primo sono speciali!
+
+    Infatti, in questo caso l'ordine di un elemento $z \in \calU_n$ può essere solamente $1$ o $n$ stesso
+
+    Ma solo $z = 1$ ha ordine 1, dunque tutti gli altri elementi di $\calU_n$ hanno ordine $n$ e sono perciò generatori di $\calU_n$
+
+    \begin{example}{}{}
+        Dato che $z_7^{12} = 1$, le potenze successive di $z_7$ sono invece
+        $$\begin{array}{llll}
+            z_7^0 = z_0 & z_7^1 = z_7 & z_7^2 = z_2 & z_7^3 = z_9 \\
+            z_7^4 = z_4 & z_7^5 = z_{11} & z_7^6 = z_6 & z_7^7 = z_1 \\
+            z_7^8 = z_8 & z_7^9 = z_3 & z_7^{10} = z_{10} & z_7^{11} = z_5
+        \end{array}$$
+        cioè abbiamo trovato un modo per rimescolare gli elementi di $\calU_n$
+    \end{example}
+
+    Osserviamo che tutti gli elementi di $\calU \backslash \{1\}$ sono generatori e dunque la successione $(\delta_{11}^a)^n$ ha periodo 11 per ogni $a \in \{1, 2, \dots, 10\}$. Cioè, i resti di $a, 2a, 3a, \dots$ divisi per $11$ hanno periodo $11$
+    
+\subsection{L'algoritmo di Euclide}
+    \begin{definition}{}{}
+        Dati due interi $n$ ed $m$ non entrambi nulli, indichiamo con $(n, m)$ il loro massimo comune divisore.
+        $$(n,m) = max\{d \in \mathbb{N}: d | n \quad \land \quad d|m\}$$
+    \end{definition}
+
+    Se $z \in \calU_n \cap \calU_m$ (cioè se $z^n = z^m = 1$) allora
+    $$z^{\lambda n+\mu m} = (z^n)^\lambda \cdot (z^m)^\mu = 1 \qquad \forall \lambda, \mu \in \mathbb{Z}$$
+
+    Quindi $z^{(n,m)}=1$
+
+    Questo fatto segue dall'algoritmo di Euclide: dati due interi $n$ e $m$, dimostreremo che l'insieme $\{\lambda n + \mu m : \lambda, \mu \in \mathbb{Z}\}$ coincide con l'insieme dei multipli di $d = (n,m)$
+
+    \begin{example}{}{}
+        Se $z^{51} = z^{120} = 1$ allora
+        $$\begin{array}{rcl}
+            120 = 2 \cdot 51 + 18 & \implies & 1 = z^{120} = (z^{51})^2 \cdot z^{18} = z^{18} \\
+            51 = 2 \cdot 18 + 15 & \implies & 1 = z^{51} = (z^{18})^2 \cdot z^{15} = z^{15} \\
+            18 = 1 \cdot 15 + 3 & \implies & 1 = z^{18} = (z^{15})^1 \cdot z^{3} = z^{3} \\
+            15 = 5 \cdot 3 + 0
+        \end{array}$$
+
+        Come ricavare i coefficienti $3$ e $-7$ per cui $(51, 120) = 3 = 3 \cdot 120 -7 \cdot 51$?
+
+        $$\begin{array}{rcl}
+            18 = 1 \cdot 15 + 3 & \implies & 3 = 18 - 15 \\
+            51 = 2 \cdot 18 + 15 & \implies & 3 = 18 - (51 - 2 \cdot 18) \\
+            120 = 2 \cdot 51 + 18 & \implies & 3 = (120 - 2 \cdot 51) - (51 - 2 \cdot (120 - 2 \cdot 51)) \\
+            & & = 120 - 2 \cdot 51 -51 + 2 \cdot 120 - 4 \cdot 51 \\
+            & & = 3 \cdot 120 - 7 \cdot 51
+        \end{array}$$
+    \end{example}
+
+    \href{https://github.com/0-Sam-0/Cryptography-UniPR}{Mio codice Python che implementa l'algoritmo di Euclide}.
+
+    \begin{question}
+    {Quali sono i generatori di $\calU_n$?}{gen-def}
+        I generatori di $\calU_n$ sono gli elementi di ordine $n$, cioè quegli elementi $z \in \calU_n$ tali che le loro potenze successive $z^0, z^1, z^2, \ldots, z^{n-1}$ sono tutte distinte e coincidono con tutti gli elementi di $\calU_n$.
+    \end{question}
+
+    \begin{question}
+    {Quanti sono i generatori di $\calU_n$?}{gen-count}
+        Il numero di generatori di $\calU_n$ è uguale al numero di interi $k$ con $1 \leq k \leq n-1$ tali che $(k,n) = 1$, cioè $\phi(n)$ dove $\phi$ è la funzione di Eulero.
+    \end{question}
+
+    \begin{question}
+    {Dato un generatore di $\calU_n$, come si trovano tutti gli altri?}{gen-find}
+        Se $g$ è un generatore di $\calU_n$, allora tutti i generatori sono esattamente gli elementi della forma $g^k$ dove $1 \leq k \leq n-1$ e $(k,n) = 1$.
+    \end{question}
+
+\subsection{Gruppi}
+    \begin{definition}{}{}
+        L'insieme $G$ si dice gruppo rispetto all'operazione $\circ$ se
+        \begin{itemize}
+            \item $\forall g, h \in G: g \circ h \in G$
+            \item $\exists e \in G : \forall g \in G :g \circ e = e \circ g = g$
+            \item $\forall g \in G: \exists h \in G : g \circ h = h \circ g = e$
+            \item $\forall g, h, j \in G : (g \circ h) \circ j = g \circ (h \circ j)$
+        \end{itemize}
+
+        L'elemento $e$ si dice elemento neutro o unità di $G$.
+
+        L'elemento $h$ si dice inverso o reciproco di $g$ e si indica con $g^{-1}$.
+
+        Un sottoinsieme $H \subseteq G$ che sia a sua volta un gruppo rispetto all'operazione $\circ$ si dice sottogruppo di $G$.
+        
+    \end{definition}
+
+    \begin{definition}{}{}
+        Sia $G$ un gruppo rispetto all'operazione $\circ$
+        \begin{itemize}
+            \item se $g \circ h = h \circ g \forall g,h \in G$ il gruppo si dice abeliano o commutativo
+            \item se $\exists g \in G : G = \langle g \rangle$ allora $G$ si dice ciclico
+        \end{itemize}
+        In questo caso definiamo $\langle g \rangle = \{ g^n : n \in \mathbb{Z}\}$
+            
+        La definizione alternativa è necessaria quando $G$ è infinito
+        
+    \end{definition}
+
+    L'insieme $\calU_n$ è un gruppo abeliano ciclico rispetto alla moltiplicazione, ed è generato da $\delta_n$
+
+    L'insieme $\calU_m$ ne è un sottogruppo sse $m|n$, ed è generato da $\delta_n^{n/m}=\delta_m$
+
+    \begin{example}{}{}
+        L'insieme $\mathbb{Z}$ è un gruppo ciclico infinito generato da $g \in \{\pm 1\}$
+    \end{example}
+    
+    % Perchè non si possono creare gruppi ciclici non abeliani?
+    
+    \begin{problem}{}{}
+        Se $G = \langle g \rangle$ e $card(G) = n$, quante soluzioni ha $x^d = 1$? (\textit{$d$ fissato})
+        \tcblower
+        Se $x$ è una soluzione, sia $x = g^m$ per un intero $m \in \{0, \dots, n-1\}$
+
+        L'equazione diventa $g^{md} = 1$ e da questo segue che $n|md$
+
+        Dividendo per $(n,d)$ si ha $\frac{n}{(n,d)}|m$ e il numero di $m \in \{0, \dots, n-1\}$ che la soddisfano è $(n,d)$.
+        \begin{example}{}{}
+            Risolvere $x^4 = 1$ in $\calU_{12}$.
+
+            $\begin{array}{lllll}
+                \begin{cases}
+                    m \in \{0,1,\dots,11\} \\
+                    g^{4m} = 1 \\
+                    g^{12} = 1
+                \end{cases} &
+                \implies &
+                12|4m \implies 3|m &
+                \implies &
+                m \in \{0,3,6,9\}
+            \end{array}$
+
+            \tcblower
+            
+            Risolvere $x^4 = 1$ in $\calU_{6}$.
+            
+            $\begin{array}{lllll}
+                \begin{cases}
+                    m \in \{0,1,\dots,5\} \\
+                    g^{4m} = 1 \\
+                    g^{6} = 1
+                \end{cases} &
+                \implies &
+                6|4m \implies 3|2m &
+                \implies &
+                m \in \{0,3\}
+            \end{array}$
+        \end{example}
+    \end{problem}
+
+\subsection{Isomorfismi fra gruppi}
+    \begin{definition}{}{}
+        Siano $G$ e $G'$ due gruppi, con operazione $\circ$ e $*$ rispettivamente.
+        
+        Un'applicazione biiettiva $\phi : G \rightarrow G'$ si dice isomorfismo se
+        $$\phi(x \circ y) = \phi(x) * \phi(y) \quad \forall x,y \in G$$
+    \end{definition}
+
+    \begin{example}{}{}
+        Posto $G = \mathbb{R}^+$ con l'operazione di moltiplicazione e $G'=\mathbb{R}$ con l'operazione di addizione, un isomorfismo è la funzione $\phi(x) = log(x)$. Infatti: $log(x \cdot y) = log(x) + log(y)$
+    \end{example}
+    
+    Un isomorfismo non è un'uguaglianza e ciò ha delle conseguenze computazionali.
+    Certi insiemi non sono adatti alla crittografia, ma degli insiemi a loro isomorfi sì.
+
+    Gli isomorfismi sono invertibili, ma ciò non significa che le operazioni coinvolte abbiano la stessa complessità computazionale.
+
+    \begin{example}{}{}
+        Dato $\phi : \mathbb{R}^+ \rightarrow \mathbb{R}$ dell'esempio precedente, l'inverso $\psi: \mathbb{R} \rightarrow \mathbb{R}^+$ è l'esponenziale.
+
+        $\phi \circ \psi$ è l'identità su $\mathbb{R}$ e $\psi \circ \phi$ è l'identità su $\mathbb{R}^+$
+    \end{example}
+    
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+\section{Lezione 2 - 27/09/2023}
+
+\end{document}
